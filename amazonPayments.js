@@ -1,9 +1,12 @@
-const Config = require('./lib/config').config;
-const Amazon = require('./lib/amazon').amazon;
+const { Config } = require('./lib/config');
+const { Amazon } = require('./lib/amazon');
+const Environment = require('./lib/environment');
 
 function connect(opts) {
   return new Amazon(new Config(opts));
 }
 
-exports.connect = connect;
-exports.Environment = require('./lib/environment');
+module.exports = {
+  connect,
+  Environment,
+};
