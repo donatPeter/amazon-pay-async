@@ -2,7 +2,7 @@ const assert = require('assert');
 
 const amazon = require('../lib/amazon.js');
 
-describe('param composition', () => {
+describe('==param composition tests==', () => {
   describe('composeParams', () => {
     it('should not change a one-dimension object', () => {
       const params = {
