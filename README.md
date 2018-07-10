@@ -108,4 +108,4 @@ payment.parseSNSResponse(responseFromSns)
 ```
 
 ## Note: 
-This is a forked version of the https://github.com/MadisonReed/amazon-payments package. For any usage information regarding version 0.x please refer for the original package.
+This is a mirrored version of the https://github.com/MadisonReed/amazon-payments package. For any usage information regarding version 0.x please refer for the original package.
