@@ -1,7 +1,7 @@
 ## Installation:
 
 ``` sh
-npm install @madisonreed/amazon-payments
+npm i amazon-payments-async
 ```
 
 ## Usage:
@@ -13,7 +13,7 @@ The `amazonPayments.Environment` object contains two properties: `Production` an
 __Example:__
 
 ``` js
-var amazonPayments = require('@madison-reed/amazon-payments');
+var amazonPayments = require('amazon-payments-async');
 var payment = amazonPayments.connect({
   environment: amazonPayments.Environment.Production,
   sellerId: 'Amazon Seller ID',
@@ -36,9 +36,9 @@ payment.offAmazonPayments.refund({
     Amount: 123.45,
     CurrencyCode: 'USD'
   }
-}, function(err) {
-  console.log(err);
 })
+  .then(res => console.log(res))
+  .catch(err => console.log(err));
 ```
 Will make a call with the following parameters:
 ``` json
@@ -50,38 +50,39 @@ Will make a call with the following parameters:
 }
 ```
 
-## api.getTokenInfo(accessToken, callback)
+## api.getTokenInfo(accessToken)
 
-getTokenInfo takes two parameters: accesToken and callback. [More Info](https://payments.amazon.com/documentation/lpwa/201749840#201749970)
+getTokenInfo takes one parameter and returns with a promise.
+[More Info](https://payments.amazon.com/documentation/lpwa/201749840#201749970)
 
-callback: err, tokenInfo
 
 __Example:__
 
 ``` js
-payment.api.getTokenInfo('access token from button', function(err, tokenInfo) {
-  console.log(tokenInfo);
-});
+payment.api.getTokenInfo('access token from button')
+  .then(res => console.log(res))
+  .catch(err => console.log(err));
 ```
 
-## api.getProfile(accessToken, callback)
+## api.getProfile(accessToken)
 
-getProfile takes two parameters: accesToken and callback. [More Info](https://payments.amazon.com/documentation/lpwa/201749840#201749970)
+getProfile takes one parameter and returns with a promise.
+[More Info](https://payments.amazon.com/documentation/lpwa/201749840#201749970)
 
-callback: err, profile
+
 
 __Example:__
 
 ``` js
-payment.api.getProfile('access token from button', function(err, profile) {
-  console.log(profile);
-});
+payment.api.getProfile('access token from button')  
+  .then(res => console.log(res))
+  .catch(err => console.log(err));
 ```
 
 
 ## offAmazonPayments.*
 
-All the methods in the offAmazonPayments object take two parameters: params and callback.
+All the methods in the offAmazonPayments object take one parameter and returns with a promise.
 The functions are all named the same as their respective API calls, except with a lowercase first letter.
 [More Info](https://payments.amazon.com/documentation/apireference/)
 
@@ -89,9 +90,9 @@ __Exmaple:__
 ``` js
 payment.offAmazonPayments.getAuthorizationDetails({
   AmazonAuthorizationId: 'P01-0000000-0000000-000000'
-}, function(err, details) {
-  // details will be the authorization details
-});
+})  
+  .then(res => console.log(res))
+  .catch(err => console.log(err));
 ```
 
 ## SNS Response handling
@@ -100,7 +101,11 @@ Version 0.1.2 added SNS response handling for dealing with [SNS messages](http:/
 
 __Example:__
 ``` js
-payment.parseSNSResponse(responseFromSns, function(err, parsed) {
+payment.parseSNSResponse(responseFromSns)
   // parsed will contain the full response from SNS unless the message is an IPN notification, in which case it will be the JSON-ified XML from the message.
-});
+  .then(res => console.log(res))
+  .catch(err => console.log(err));
 ```
+
+## Note: 
+This is a mirrored version of the https://github.com/MadisonReed/amazon-payments package. For any usage information regarding version 0.x please refer for the original package.
