@@ -1,15 +1,15 @@
 {
-  "name": "amazon-payments-async",
+  "name": "amazon-pay-async",
   "author": {
     "name": "Donat Peter",
     "email": "peterdonat.bme@gmail.com"
   },
-  "description": "API wrapper for Amazon Payments using promises",
+  "description": "API wrapper for Amazon Pay using promises",
   "version": "1.0.0",
   "main": "amazonPayments.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/donatPeter/amazon-payments-async"
+    "url": "https://github.com/donatPeter/amazon-pay-async"
   },
   "contributors": [
     {
@@ -44,7 +44,7 @@
   "license": "MIT",
   "readmeFilename": "README.md",
   "bugs": {
-    "url": "https://github.com/donatPeter/amazon-payments-async/issues"
+    "url": "https://github.com/donatPeter/amazon-pay-async/issues"
   },
-  "homepage": "https://github.com/donatPeter/amazon-payments-async"
+  "homepage": "https://github.com/donatPeter/amazon-pay-async"
 }

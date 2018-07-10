@@ -1,7 +1,7 @@
 ## Installation:
 
 ``` sh
-npm i amazon-payments-async
+npm i amazon-pay-async
 ```
 
 ## Usage:
@@ -13,7 +13,7 @@ The `amazonPayments.Environment` object contains two properties: `Production` an
 __Example:__
 
 ``` js
-var amazonPayments = require('amazon-payments-async');
+var amazonPayments = require('amazon-pay-async');
 var payment = amazonPayments.connect({
   environment: amazonPayments.Environment.Production,
   sellerId: 'Amazon Seller ID',
