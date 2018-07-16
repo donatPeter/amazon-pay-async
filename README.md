@@ -1,5 +1,7 @@
 ## Installation:
 
+[![NPM](https://nodei.co/npm/amazon-pay-async.png)](https://nodei.co/npm/amazon-pay-async/)
+
 ``` sh
 npm i amazon-pay-async
 ```
