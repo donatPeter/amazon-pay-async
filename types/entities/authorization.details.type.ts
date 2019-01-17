@@ -1,5 +1,5 @@
+import { IAuthorizationStatus } from './authorization.status.type';
 import { IPrice } from './price.type';
-import { IStatus } from './status.type';
 
 export interface IAuthorizationDetails {
   AmazonAuthorizationId: string;
@@ -11,7 +11,7 @@ export interface IAuthorizationDetails {
   IdList: string[];
   CreationTimestamp: Date;
   ExpirationTimestamp: Date;
-  AuthorizationStatus: IStatus;
+  AuthorizationStatus: IAuthorizationStatus;
   SoftDecline: boolean;
   CaptureNow: boolean;
   SoftDescriptor: string;

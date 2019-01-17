@@ -1,5 +1,5 @@
+import { ICaptureStatus } from './capture.status.type';
 import { IPrice } from './price.type';
-import { IStatus } from './status.type';
 
 export interface ICaptureDetails {
   AmazonCaptureId: string;
@@ -10,6 +10,6 @@ export interface ICaptureDetails {
   CaptureFee: IPrice;
   IdList: string[];
   CreationTimestamp: Date;
-  CaptureStatus: IStatus;
+  CaptureStatus: ICaptureStatus;
   SoftDescriptor: string;
 }

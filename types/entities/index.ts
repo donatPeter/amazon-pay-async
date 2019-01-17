@@ -21,4 +21,3 @@ export { IReportRequestInfo } from './report.request.info.type';
 export { IReportSchedule } from './report.schedule.type';
 export { ISellerBillingAgreementAttributes } from './seller.billing.agreement.attributes.type';
 export { ISellerOrderAttributes } from './seller.order.attributes.type';
-export { IStatus } from './status.type';

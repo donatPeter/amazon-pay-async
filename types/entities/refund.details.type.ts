@@ -1,6 +1,6 @@
 import { RefundType } from '../enums/refund.type.enum';
 import { IPrice } from './price.type';
-import { IStatus } from './status.type';
+import { IRefundStatus } from './refund.status.type';
 
 export interface IRefundDetails {
   AmazonRefundId: string;
@@ -10,6 +10,6 @@ export interface IRefundDetails {
   RefundAmount: IPrice;
   FeeRefunded: IPrice;
   CreationTimestamp: Date;
-  RefundStatus: IStatus;
+  RefundStatus: IRefundStatus;
   SoftDescriptor: string;
 }

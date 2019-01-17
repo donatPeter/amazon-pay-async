@@ -28,7 +28,6 @@ export {
   IReportSchedule,
   ISellerBillingAgreementAttributes,
   ISellerOrderAttributes,
-  IStatus,
 } from './types/entities';
 export {
   AccountStatus,

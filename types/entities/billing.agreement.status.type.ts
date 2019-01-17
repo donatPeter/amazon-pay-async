@@ -1,5 +1,7 @@
+import { BillingAgreementStates } from '../enums/states.enum';
+
 export interface IBillingAgreementStatus {
-  State: string;
+  State: BillingAgreementStates;
   LastUpdatedTimestamp: string;
   ReasonCode: string;
   ReasonDescription: string;
