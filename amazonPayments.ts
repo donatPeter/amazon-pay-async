@@ -84,6 +84,10 @@ export {
   IUpdateReportAcknowledgementsRequest, IUpdateReportAcknowledgementsResposne,
   IValidateBillingAgreementRequest, IValidateBillingAgreementResponse,
 } from './types';
+export {
+  BillingAgreementConstraintIds,
+  OrderReferenceConstraintIds,
+} from './types/constraints';
 
 export default class AmazonPayClient {
   public static readonly Environments = EnvironmentEnum;
