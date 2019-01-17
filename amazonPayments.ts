@@ -31,6 +31,11 @@ export {
 } from './types/entities';
 export {
   AccountStatus,
+  AuthorizationStatusReasons,
+  BillingAgreementStatusReasons,
+  CaptureStatusReasons,
+  OrderReferenceStatusReasons,
+  RefundStatusReasons,
   DestinationType,
   RefundType,
   ReportProcessingStatusList,
