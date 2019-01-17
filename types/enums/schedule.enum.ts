@@ -1,0 +1,17 @@
+export enum Schedule {
+  _15_MINUTES_ = '_15_MINUTES_',
+  _30_MINUTES_ = '_30_MINUTES_',
+  _1_HOUR_ = '_1_HOUR_',
+  _2_HOURS_ = '_2_HOURS_',
+  _4_HOURS_ = '_4_HOURS_',
+  _8_HOURS_ = '_8_HOURS_',
+  _12_HOURS_ = '_12_HOURS_',
+  _1_DAY_ = '_1_DAY_',
+  _2_DAYS_ = '_2_DAYS_',
+  _72_HOURS_ = '_72_HOURS_',
+  _1_WEEK_ = '_1_WEEK_',
+  _14_DAYS_ = '_14_DAYS_',
+  _15_DAYS_ = '_15_DAYS_',
+  _30_DAYS_ = '_30_DAYS_',
+  _NEVER_ = '_NEVER_',
+}

@@ -1,3 +1,4 @@
+import { RefundType } from '../enums/refund.type.enum';
 import { IPrice } from './price.type';
 import { IStatus } from './status.type';
 
@@ -11,8 +12,4 @@ export interface IRefundDetails {
   CreationTimestamp: Date;
   RefundStatus: IStatus;
   SoftDescriptor: string;
-}
-
-enum RefundType {
-  SellerInitiated = 'SellerInitiated',
 }

@@ -12,7 +12,6 @@ export interface IEnvironment {
   apiEndpoint: string;
   reports: string;
 }
-
 export class Environment implements IEnvironment {
   public mwsEndpoint: string;
   public apiEndpoint: string;
@@ -24,11 +23,21 @@ export class Environment implements IEnvironment {
   }
 }
 
-/**
- * Amazon Payments Environments
- * @type {Environment}
- */
-export const Sandbox = new Environment(mwsEndpointSandbox, apiSandbox, reportMwsEndpoint);
-export const Production = new Environment(mwsEndpointProd, apiProd, reportMwsEndpoint);
-export const SandboxEU = new Environment(mwsEndpointSandboxEU, apiSandbox, reportMwsEndpointEU);
-export const ProductionEU = new Environment(mwsEndpointProdEU, apiProd, reportMwsEndpointEU);
+const Sandbox = new Environment(mwsEndpointSandbox, apiSandbox, reportMwsEndpoint);
+const Production = new Environment(mwsEndpointProd, apiProd, reportMwsEndpoint);
+const SandboxEU = new Environment(mwsEndpointSandboxEU, apiSandbox, reportMwsEndpointEU);
+const ProductionEU = new Environment(mwsEndpointProdEU, apiProd, reportMwsEndpointEU);
+
+export const EnvironmentList = {
+  Production,
+  ProductionEU,
+  Sandbox,
+  SandboxEU,
+};
+
+export enum EnvironmentEnum {
+  Production = 'Production',
+  ProductionEU = 'ProductionEU',
+  Sandbox = 'Sandbox',
+  SandboxEU = 'SandboxEU',
+}

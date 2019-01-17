@@ -22,75 +22,7 @@ interface IObject {
 }
 
 export class Amazon {
-  public config: IConfiguration;
-  constructor(config: IConfiguration) {
-    this.config = new Config(config);
-  }
-
-  public async callApiMethod(action: string, params?: object, bearer?: string) {
-    const opts: Options = {
-      method: 'get',
-      resolveWithFullResponse: false,
-      url: `${this.config.environment.apiEndpoint}/${action}`,
-    };
-
-    if (params) {
-      opts.qs = params;
-    }
-
-    if (bearer) {
-      opts.headers = {
-        Authorization: `bearer ${bearer}`,
-      };
-    }
-
-    try {
-      const resultBody = await request.get(opts);
-      const response = this.parseApiResponse(resultBody);
-      if (response instanceof Error) {
-        throw response;
-      }
-      return response;
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  public async callMwsMethod(method: string, version: string, params?: IObject) {
-    const url = this.config.environment.mwsEndpoint;
-    const required: IObject = {
-      AWSAccessKeyId: this.config.mwsAccessKey,
-      Action: method,
-      SellerId: this.config.sellerId,
-      Timestamp: new Date().toISOString(),
-      Version: version,
-    };
-
-    params = composeParams(params);
-    for (const k in required) {
-      if (!params.hasOwnProperty(k)) {
-        params[k] = required[k];
-      }
-    }
-
-    params = attachSignature(url, this.config.mwsSecretKey, params);
-    const opts = {
-      form: params,
-      method: 'post',
-      resolveWithFullResponse: true,
-      url,
-    };
-
-    try {
-      const result = await request.post(opts);
-      const response = this.parseMwsResponse(method, result);
-      return response;
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  public async parseSNSResponse(response: any) {
+  public static async parseSNSResponse(response: any) {
     try {
       const defaultHostPattern = /^sns\.[a-zA-Z0-9-]{3,}\.amazonaws\.com(\.cn)?$/;
       const requiredList = [
@@ -156,7 +88,7 @@ export class Amazon {
     }
   }
 
-  public async parseIPNMessage(message: any) {
+  private static async parseIPNMessage(message: any) {
     message = safeJSONParse(message);
     if (!isObject(message) || !message.NotificationData) {
       return message;
@@ -179,6 +111,70 @@ export class Amazon {
       return message;
     } catch (err) {
       return Promise.reject(err);
+    }
+  }
+  public config: Config;
+
+  constructor(config: IConfiguration) {
+    this.config = new Config(config);
+  }
+
+  public async callApiMethod(action: string, bearer?: string) {
+    const opts: Options = {
+      method: 'get',
+      resolveWithFullResponse: false,
+      url: `${this.config.environment.apiEndpoint}/${action}`,
+    };
+
+    if (bearer) {
+      opts.headers = {
+        Authorization: `bearer ${bearer}`,
+      };
+    }
+
+    try {
+      const resultBody = await request.get(opts);
+      const response = this.parseApiResponse(resultBody);
+      if (response instanceof Error) {
+        throw response;
+      }
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  public async callMwsMethod(method: string, version: string, params?: IObject) {
+    try {
+      const url = this.config.environment.mwsEndpoint;
+      const required: IObject = {
+        AWSAccessKeyId: this.config.mwsAccessKey,
+        Action: method,
+        SellerId: this.config.sellerId,
+        Timestamp: new Date().toISOString(),
+        Version: version,
+      };
+
+      params = composeParams(params);
+      for (const k in required) {
+        if (!params.hasOwnProperty(k)) {
+          params[k] = required[k];
+        }
+      }
+
+      params = attachSignature(url, this.config.mwsSecretKey, params);
+      const opts = {
+        form: params,
+        method: 'post',
+        resolveWithFullResponse: true,
+        url,
+      };
+
+      const result = await request.post(opts);
+      const response = this.parseMwsResponse(method, result);
+      return response;
+    } catch (err) {
+      throw err;
     }
   }
 

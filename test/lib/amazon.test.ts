@@ -2,18 +2,17 @@ import 'jest';
 import * as mockery from 'mockery';
 import * as request from 'request-promise-native';
 
-import { IConfiguration } from '../classes/config';
-import { Environment } from '../classes/environment';
-import * as helpers from '../helpers/helpers';
-import { Amazon } from '../lib/amazon';
+import { EnvironmentEnum } from '../../classes/environment';
+import * as helpers from '../../helpers/helpers';
+import { Amazon } from '../../lib/amazon';
 
 jest.mock('request');
 
 describe('Amazon', () => {
   let amazon: Amazon;
-  const config: IConfiguration = {
+  const config = {
     clientId: 'clientId',
-    environment: new Environment('https://api.amazon.com', 'https://api.amazon.com', 'https://api.amazon.com'),
+    environment: EnvironmentEnum.SandboxEU,
     mwsAccessKey: 'mwsAccessKey',
     mwsSecretKey: 'mwsSecretKey',
     sellerId: 'sellerId',

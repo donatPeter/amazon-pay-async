@@ -1,4 +1,4 @@
-import {IAuthorizationDetails} from './entities/authorization.details.type';
+import { IAuthorizationDetails } from './entities/authorization.details.type';
 
 export interface IGetAuthorizationDetailsRequest {
   AmazonAuthorizationId: string;

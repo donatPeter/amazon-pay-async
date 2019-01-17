@@ -1,4 +1,4 @@
-import { AccountStatus } from './entities/account.status.type';
+import { AccountStatus } from './enums/account.status.enum';
 
 export interface IGetMerchantAccountStatusRequest {
   SellerId: string;

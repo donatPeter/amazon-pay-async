@@ -1,14 +1,6 @@
 export interface IStatus {
-  State: State;
+  State: string;
   LastUpdateTimestamp: Date;
   ReasonCode: string;
   ReasonDescription: string;
-}
-
-enum State {
-  Pending = 'Pending',
-  Open = 'Open',
-  Declined = 'Declined',
-  Closed = 'Closed',
-  Completed = 'Completed',
 }

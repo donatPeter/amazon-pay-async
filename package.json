@@ -6,7 +6,8 @@
   },
   "description": "API wrapper for Amazon Pay using promises",
   "version": "1.0.3",
-  "main": "amazonPayments.js",
+  "main": "dist/amazonPayments.js",
+  "types": "dist/amazonPayments.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/donatPeter/amazon-pay-async"
@@ -45,6 +46,7 @@
     "typescript": "^3.2.2"
   },
   "scripts": {
+    "build": "rm -rf ./dist && tsc",
     "test": "jest"
   },
   "engines": {

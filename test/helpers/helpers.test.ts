@@ -1,5 +1,5 @@
 import 'jest';
-import { attachSignature, composeParams, safeJSONParse } from './helpers';
+import { attachSignature, composeParams, safeJSONParse } from '../../helpers/helpers';
 
 describe('==param composition tests==', () => {
   describe('composeParams', () => {
