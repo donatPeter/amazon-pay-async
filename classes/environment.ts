@@ -28,7 +28,7 @@ const Production = new Environment(mwsEndpointProd, apiProd, reportMwsEndpoint);
 const SandboxEU = new Environment(mwsEndpointSandboxEU, apiSandbox, reportMwsEndpointEU);
 const ProductionEU = new Environment(mwsEndpointProdEU, apiProd, reportMwsEndpointEU);
 
-export const EnvironmentList = {
+export const EnvironmentList: IEnvironmentList = {
   Production,
   ProductionEU,
   Sandbox,
@@ -40,4 +40,8 @@ export enum EnvironmentEnum {
   ProductionEU = 'ProductionEU',
   Sandbox = 'Sandbox',
   SandboxEU = 'SandboxEU',
+}
+
+interface IEnvironmentList {
+  [key: string]: Environment;
 }
