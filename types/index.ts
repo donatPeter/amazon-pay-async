@@ -31,6 +31,7 @@ export { IRequestReportRequest, IRequestReportResponse } from './request.report.
 export { ISetBillingAgreementDetailsRequest, ISetBillingAgreementDetailsResponse } from './set.billing.agreement.details.type';
 export { ISetOrderAttributesRequest, ISetOrderAttributesResponse } from './set.order.attributes.type';
 export { ISetOrderReferenceDetailsRequest, ISetOrderReferenceDetailsResponse } from './set.order.reference.details.type';
+export { ISNSResponse } from './sns.response.type';
 export { ITokenInformationResponse } from './token.information.type';
 export { IUpdateReportAcknowledgementsRequest, IUpdateReportAcknowledgementsResposne } from './update.report.acknowledgements.type';
 export { IValidateBillingAgreementRequest, IValidateBillingAgreementResponse } from './validate.billing.agreement.type';
