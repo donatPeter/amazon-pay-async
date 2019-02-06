@@ -26,7 +26,7 @@ describe('Auth', () => {
       auth.getTokenInfo('token');
 
       expect(spy).toHaveBeenCalled();
-      expect(spy).toHaveBeenCalledWith('auth/o2/tokeninfo', 'token');
+      expect(spy).toHaveBeenCalledWith('auth/o2/tokeninfo', { access_token: 'token' });
     });
 
     it('should throw an error if the results aud not equal with the client id', async () => {
@@ -60,7 +60,7 @@ describe('Auth', () => {
       } as ITokenInformationResponse);
       await auth.getProfile('token');
 
-      expect(spy).toHaveBeenLastCalledWith('user/profile', 'token');
+      expect(spy).toHaveBeenLastCalledWith('user/profile', undefined, 'token');
     });
 
     it('should rethrow the error in case of failure for an internal call', async () => {

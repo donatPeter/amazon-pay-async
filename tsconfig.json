@@ -9,10 +9,11 @@
       "esnext"
     ],
     "moduleResolution": "node",
-    "noImplicitAny": false,
     "outDir": "./dist",
+    "noImplicitAny": false,
     "declaration": true,
-    "strict": false
+    "strict": true,
+    "noUnusedParameters": true
   },
   "exclude": [
     "node_modules/**",

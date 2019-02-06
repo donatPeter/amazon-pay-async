@@ -1,12 +1,10 @@
-const errorTypes = Object.freeze({
-  badToken: 'bad_token',
-  invalidCertificateDomain: 'invalid_certificate_domain',
-  invalidSignatureVersion: 'invalid_signature_version',
-  missingParameter: 'missing_parameter',
-  parseError: 'parse_error',
-  signatureMismatch: 'signature_mismatch',
-  unknown: 'unknown',
-});
+enum ErrorTypes {
+  badToken = 'bad_token',
+  invalidCertificateDomain = 'invalid_certificate_domain',
+  invalidSignatureVersion = 'invalid_signature_version',
+  parseError = 'parse_error',
+  signatureMismatch = 'signature_mismatch',
+}
 
 class AmazonError extends Error {
   private type: string;
@@ -24,31 +22,9 @@ export class ApiError extends AmazonError {
   }
 }
 
-export class UnknownError extends Error {
-  public message: string;
-  private readonly type: string = errorTypes.unknown;
-  private body: any;
-  constructor(message: string, body?: any) {
-    super(message);
-    this.message = message;
-    this.body = body;
-  }
-}
-
-export class MissingParameterError extends Error {
-  public message: string;
-  private readonly type: string = errorTypes.missingParameter;
-  private body: any;
-  constructor(message: string, body?: any) {
-    super(message);
-    this.message = message;
-    this.body = body;
-  }
-}
-
 export class BadToken extends Error {
   public message: string;
-  private readonly type: string = errorTypes.badToken;
+  private readonly type: string = ErrorTypes.badToken;
   private body: any;
   constructor(message: string, body?: any) {
     super(message);
@@ -59,7 +35,7 @@ export class BadToken extends Error {
 
 export class ParseError extends Error {
   public message: string;
-  private readonly type: string = errorTypes.parseError;
+  private readonly type: string = ErrorTypes.parseError;
   private body: any;
   constructor(message: string, body?: any) {
     super(message);
@@ -70,7 +46,7 @@ export class ParseError extends Error {
 
 export class InvalidCertificateDomain extends Error {
   public message: string;
-  private readonly type: string = errorTypes.invalidCertificateDomain;
+  private readonly type: string = ErrorTypes.invalidCertificateDomain;
   private body: any;
   constructor(message: string, body?: any) {
     super(message);
@@ -81,7 +57,7 @@ export class InvalidCertificateDomain extends Error {
 
 export class SignatureMismatch extends Error {
   public message: string;
-  private readonly type: string = errorTypes.signatureMismatch;
+  private readonly type: string = ErrorTypes.signatureMismatch;
   private body: any;
   constructor(message: string, body?: any) {
     super(message);
@@ -92,7 +68,7 @@ export class SignatureMismatch extends Error {
 
 export class InvalidSignatureVersion extends Error {
   public message: string;
-  private readonly type: string = errorTypes.invalidSignatureVersion;
+  private readonly type: string = ErrorTypes.invalidSignatureVersion;
   private body: any;
   constructor(message: string, body?: any) {
     super(message);

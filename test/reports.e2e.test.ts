@@ -23,7 +23,7 @@ xdescribe('==reports testt==', () => {
     });
   });
 
-  let reportRequestListNextToken;
+  let reportRequestListNextToken: any;
   describe('getReportRequestList', () => {
     it('should not return null', async (done) => {
       const result = await amazonReports.getReportRequestList({});
@@ -62,7 +62,7 @@ xdescribe('==reports testt==', () => {
 
   describe('cancelReportRequests', () => {
     it('should not return null', async (done) => {
-      this.timeout(5000);
+      jest.setTimeout(5000);
       const result = await amazonReports.cancelReportRequests({ ReportRequestIdList: [reportRequestId] });
       expect(result).toBeDefined();
       expect(result.ReportRequestInfo).toBeGreaterThanOrEqual(0);
@@ -128,7 +128,7 @@ xdescribe('==reports testt==', () => {
     });
   });
 
-  let reportScheduleListNextToken;
+  let reportScheduleListNextToken: any;
   describe('getReportScheduleList', () => {
     it('should not return null', async (done) => {
       const result = await amazonReports.getReportScheduleList({});
