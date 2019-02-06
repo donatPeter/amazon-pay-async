@@ -2,7 +2,6 @@ import * as crypto from 'crypto';
 import * as request from 'request-promise-native';
 import { Options } from 'request-promise-native';
 import * as URL from 'url';
-import * as util from 'util';
 import * as xml2js from 'xml2js';
 
 import { Config, IConfiguration } from '../classes/config';
@@ -10,31 +9,90 @@ import {
   ApiError,
   InvalidCertificateDomain,
   InvalidSignatureVersion,
-  MissingParameterError,
   ParseError,
   SignatureMismatch,
 } from '../classes/error';
 import { AmazonResponse } from '../classes/response';
 import { attachSignature, composeParams, isObject, safeJSONParse } from '../helpers/helpers';
+import { ISNSResponse } from '../types';
 
 interface IObject {
   [key: string]: any;
 }
 
 export class Amazon {
-  public static async parseSNSResponse(response: any) {
+  public config: Config;
+
+  constructor(config: IConfiguration) {
+    this.config = new Config(config);
+  }
+
+  public async callApiMethod(action: string, params?: IObject, bearer?: string) {
+    const opts: Options = {
+      method: 'get',
+      resolveWithFullResponse: false,
+      url: `${this.config.environment.apiEndpoint}/${action}`,
+    };
+
+    if (params) {
+      opts.qs = params;
+    }
+
+    if (bearer) {
+      opts.headers = {
+        Authorization: `bearer ${bearer}`,
+      };
+    }
+
+    try {
+      const resultBody = await request.get(opts);
+      const response = this.parseApiResponse(resultBody);
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  public async callMwsMethod(method: string, version: string, params?: IObject) {
+    try {
+      const url = this.config.environment.mwsEndpoint;
+      const required: IObject = {
+        AWSAccessKeyId: this.config.mwsAccessKey,
+        Action: method,
+        SellerId: this.config.sellerId,
+        Timestamp: new Date().toISOString(),
+        Version: version,
+      };
+
+      if (params) {
+        params = composeParams(params);
+      }
+
+      for (const k in required) {
+        if (params && !params.hasOwnProperty(k)) {
+          params[k] = required[k];
+        }
+      }
+
+      params = attachSignature(url, this.config.mwsSecretKey, params);
+      const opts = {
+        form: params,
+        method: 'post',
+        resolveWithFullResponse: true,
+        url,
+      };
+
+      const result = await request.post(opts);
+      const response = await this.parseMwsResponse(method, result);
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  public async parseSNSResponse(response: ISNSResponse) {
     try {
       const defaultHostPattern = /^sns\.[a-zA-Z0-9-]{3,}\.amazonaws\.com(\.cn)?$/;
-      const requiredList = [
-        'Message',
-        'MessageId',
-        'SignatureVersion',
-        'Signature',
-        'SigningCertURL',
-        'Timestamp',
-        'TopicArn',
-        'Type',
-      ];
       const signable = [
         'Message',
         'MessageId',
@@ -46,13 +104,7 @@ export class Amazon {
         'Type',
       ];
 
-      for (const required of requiredList) {
-        if (!response[required]) {
-          throw new MissingParameterError(`Missing parameter on SNS response: ${required}`);
-        }
-      }
-
-      if (response.SignatureVersion !== 1 && response.SignatureVersion !== '1') {
+      if (response.SignatureVersion !== '1') {
         throw new InvalidSignatureVersion(`Unknown SNS Signature version: ${response.SignatureVersion}`);
       }
 
@@ -64,7 +116,9 @@ export class Amazon {
       });
 
       const parsed = URL.parse(response.SigningCertURL);
-      if (parsed.protocol !== 'https:' || parsed.path.substr(-4) !== '.pem' || !defaultHostPattern.test(parsed.host)) {
+      if (parsed.protocol !== 'https:' ||
+        (parsed.path && parsed.path.substr(-4) !== '.pem') ||
+        (parsed.host && !defaultHostPattern.test(parsed.host))) {
         throw new InvalidCertificateDomain('The certificate is located on an invalid domain.');
       }
 
@@ -88,7 +142,17 @@ export class Amazon {
     }
   }
 
-  private static async parseIPNMessage(message: any) {
+  private async parseMwsResponse(method: string, response: any): Promise<any> {
+    // if it's XML, then we parse it correctly
+    if ((response.headers && response.headers['content-type'] === 'text/xml') || response.error) {
+      const result: AmazonResponse = await this.parseString(response);
+      return result;
+    } else {
+      return new AmazonResponse(method, { Response: response.body }).response;
+    }
+  }
+
+  private async parseIPNMessage(message: any) {
     message = safeJSONParse(message);
     if (!isObject(message) || !message.NotificationData) {
       return message;
@@ -104,107 +168,12 @@ export class Amazon {
     };
 
     try {
-      const xml2jsPromise = util.promisify(xml2js.parseString);
-      const result = await xml2jsPromise(message.NotificationData, { explicitArray: false }, null);
+      const result = await this.parseString(message.NotificationData);
       const keys = xmlKeys[type] || [];
       message.NotificationData = new AmazonResponse(type, result, keys[0], keys[1]);
       return message;
     } catch (err) {
       return Promise.reject(err);
-    }
-  }
-  public config: Config;
-
-  constructor(config: IConfiguration) {
-    this.config = new Config(config);
-  }
-
-  public async callApiMethod(action: string, bearer?: string) {
-    const opts: Options = {
-      method: 'get',
-      resolveWithFullResponse: false,
-      url: `${this.config.environment.apiEndpoint}/${action}`,
-    };
-
-    if (bearer) {
-      opts.headers = {
-        Authorization: `bearer ${bearer}`,
-      };
-    }
-
-    try {
-      const resultBody = await request.get(opts);
-      const response = this.parseApiResponse(resultBody);
-      if (response instanceof Error) {
-        throw response;
-      }
-      return response;
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  public async callMwsMethod(method: string, version: string, params?: IObject) {
-    try {
-      const url = this.config.environment.mwsEndpoint;
-      const required: IObject = {
-        AWSAccessKeyId: this.config.mwsAccessKey,
-        Action: method,
-        SellerId: this.config.sellerId,
-        Timestamp: new Date().toISOString(),
-        Version: version,
-      };
-
-      params = composeParams(params);
-      for (const k in required) {
-        if (!params.hasOwnProperty(k)) {
-          params[k] = required[k];
-        }
-      }
-
-      params = attachSignature(url, this.config.mwsSecretKey, params);
-      const opts = {
-        form: params,
-        method: 'post',
-        resolveWithFullResponse: true,
-        url,
-      };
-
-      const result = await request.post(opts);
-      const response = this.parseMwsResponse(method, result);
-      return response;
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  private parseMwsResponse(method: string, response: any): any {
-    // if it's XML, then we parse it correctly
-    if ((response.headers && response.headers['content-type'] === 'text/xml') || response.error) {
-      let result: AmazonResponse;
-      xml2js.parseString(response.body, { explicitArray: false }, (err, res) => {
-        if (err) {
-          throw err;
-        }
-
-        if (res.ErrorResponse) {
-          err = {
-            Code: 'Unknown',
-            Message: 'Unknown MWS error',
-          };
-
-          if (res.ErrorResponse.Error) {
-            err = res.ErrorResponse.Error;
-          }
-
-          const apiError = res.ErrorResponse.Error;
-          throw new ApiError(apiError.Code, apiError.Message, res);
-        }
-        result = new AmazonResponse(method, res).response;
-      });
-      return result;
-    } else {
-      return new AmazonResponse(method, { Response: response.body }).response;
     }
   }
 
@@ -215,10 +184,33 @@ export class Amazon {
     } catch (e) {
       throw new ParseError('Could not parse Amazon response.', response);
     }
-
     if (parsed.error) {
       throw new ApiError(parsed.error, parsed.error_description, parsed);
     }
     return parsed;
+  }
+
+  private parseString(response: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      xml2js.parseString(response.body, { explicitArray: false }, (err, res) => {
+        if (err) {
+          reject(err);
+        }
+
+        if (res.ErrorResponse) {
+          err = {
+            code: 'Unknown',
+            message: 'Unknown MWS error',
+          };
+
+          if (res.ErrorResponse.Error) {
+            err = res.ErrorResponse.Error;
+          }
+          resolve(new ApiError(err.code, err.message, res));
+        }
+
+        resolve(res);
+      });
+    });
   }
 }

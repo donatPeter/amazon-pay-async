@@ -11,7 +11,8 @@ export class Auth {
 
   public async getTokenInfo(accessToken: string): Promise<ITokenInformationResponse> {
     try {
-      const tokenInfo: ITokenInformationResponse = await this.requestHandler.callApiMethod('auth/o2/tokeninfo', accessToken);
+      const tokenInfo: ITokenInformationResponse = await this.requestHandler
+        .callApiMethod('auth/o2/tokeninfo', { access_token: accessToken });
       if (tokenInfo.aud !== this.requestHandler.config.clientId) {
         throw new BadToken('Token does not belong to us');
       }
@@ -24,7 +25,7 @@ export class Auth {
   public async getProfile(accessToken: string) {
     try {
       await this.getTokenInfo(accessToken);
-      return this.requestHandler.callApiMethod('user/profile', accessToken);
+      return this.requestHandler.callApiMethod('user/profile', undefined, accessToken);
     } catch (err) {
       throw err;
     }
