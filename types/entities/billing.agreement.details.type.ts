@@ -15,7 +15,7 @@ export interface IBillingAgreementDetails {
   ReleaseEnvironment: string;
   SellerBillingAgreementAttributes: ISellerBillingAgreementAttributes;
   BillingAgreementStatus: IBillingAgreementStatus;
-  Constraints: IConstraints[];
+  Constraints: IConstraints[] | IConstraints;
   CreationTimestamp: Date;
   BillingAgreementConsent: boolean;
 }

@@ -15,7 +15,7 @@ export interface IOrderReferenceDetails {
   ReleaseEnvironment: string;
   SellerOrderAttributes: ISellerOrderAttributes;
   OrderReferenceStatus: IOrderReferenceStatus;
-  Constraints: IConstraints[];
+  Constraints: IConstraints[] | IConstraints;
   CreationTimestamp: Date;
   ExpirationTimestamp: Date;
   IdList: string[];
