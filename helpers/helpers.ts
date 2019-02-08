@@ -9,7 +9,7 @@ export function composeParams(params: IObject, label?: string, composed?: any) {
   composed = safeObjectCast(composed);
   params = safeObjectCast(params);
 
-  Object.keys(params).forEach((key) => {
+  Object.keys(params).forEach((key: string) => {
     const value = params[key];
     const newLabel = label ? `${label}.${key}` : key;
 

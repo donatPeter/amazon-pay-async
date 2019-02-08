@@ -64,10 +64,7 @@ export class Amazon {
         Version: version,
       };
 
-      if (params) {
-        params = composeParams(params);
-      }
-
+      params = composeParams(params || {});
       for (const k in required) {
         if (params && !params.hasOwnProperty(k)) {
           params[k] = required[k];
@@ -145,7 +142,7 @@ export class Amazon {
   private async parseMwsResponse(method: string, response: any): Promise<any> {
     // if it's XML, then we parse it correctly
     if ((response.headers && response.headers['content-type'] === 'text/xml') || response.error) {
-      const result: AmazonResponse = await this.parseString(response);
+      const result: AmazonResponse = await this.parseString(response.body, method);
       return result;
     } else {
       return new AmazonResponse(method, { Response: response.body }).response;
@@ -190,9 +187,9 @@ export class Amazon {
     return parsed;
   }
 
-  private parseString(response: any): Promise<any> {
+  private parseString(response: xml2js.convertableToString, method?: string): Promise<AmazonResponse> {
     return new Promise((resolve, reject) => {
-      xml2js.parseString(response.body, { explicitArray: false }, (err, res) => {
+      xml2js.parseString(response, { explicitArray: false }, (err, res) => {
         if (err) {
           reject(err);
         }
@@ -206,10 +203,10 @@ export class Amazon {
           if (res.ErrorResponse.Error) {
             err = res.ErrorResponse.Error;
           }
-          resolve(new ApiError(err.code, err.message, res));
+          reject(new ApiError(err.code, err.message, res));
         }
 
-        resolve(res);
+        resolve(new AmazonResponse(method || '', res).response);
       });
     });
   }
