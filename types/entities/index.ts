@@ -6,7 +6,7 @@ export { IBillingAgreementLimits } from './billing.agreement.limits.type';
 export { IBillingAgreementStatus } from './billing.agreement.status.type';
 export { IBuyer } from './buyer.type';
 export { ICaptureDetails } from './capture.details.type';
-export { IConstraints } from './constraints.type';
+export { IConstraint } from './constraints.type';
 export { IDestination } from './destination.type';
 export { IOrderAttributes } from './order.attributes.type';
 export { IOrderReferenceAttributes } from './order.reference.attributes.type';

@@ -13,7 +13,7 @@ export {
   IBillingAgreementStatus,
   IBuyer,
   ICaptureDetails,
-  IConstraints,
+  IConstraint,
   IDestination,
   IOrderAttributes,
   IOrderReferenceAttributes,

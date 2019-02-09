@@ -1,5 +1,5 @@
 import { IBuyer } from './buyer.type';
-import { IConstraints } from './constraints.type';
+import { IConstraint } from './constraints.type';
 import { IDestination } from './destination.type';
 import { IOrderReferenceStatus } from './order.reference.status.type';
 import { IOrderTotal } from './order.total.type';
@@ -15,7 +15,7 @@ export interface IOrderReferenceDetails {
   ReleaseEnvironment: string;
   SellerOrderAttributes: ISellerOrderAttributes;
   OrderReferenceStatus: IOrderReferenceStatus;
-  Constraints: IConstraints[] | IConstraints;
+  Constraints: { Constraint: IConstraint } | { Constraint: IConstraint[] };
   CreationTimestamp: Date;
   ExpirationTimestamp: Date;
   IdList: string[];

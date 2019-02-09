@@ -1,7 +1,7 @@
 import { IBillingAgreementLimits } from './billing.agreement.limits.type';
 import { IBillingAgreementStatus } from './billing.agreement.status.type';
 import { IBuyer } from './buyer.type';
-import { IConstraints } from './constraints.type';
+import { IConstraint } from './constraints.type';
 import { IDestination } from './destination.type';
 import { ISellerBillingAgreementAttributes } from './seller.billing.agreement.attributes.type';
 
@@ -15,7 +15,7 @@ export interface IBillingAgreementDetails {
   ReleaseEnvironment: string;
   SellerBillingAgreementAttributes: ISellerBillingAgreementAttributes;
   BillingAgreementStatus: IBillingAgreementStatus;
-  Constraints: IConstraints[] | IConstraints;
+  Constraints: { Constraint: IConstraint } | { Constraint: IConstraint[] };
   CreationTimestamp: Date;
   BillingAgreementConsent: boolean;
 }
